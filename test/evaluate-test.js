@@ -16,6 +16,9 @@ describe('json-filter-expressions', () => {
         });
       });
       describe('using "exists"', () => {
+        it('["has", 1] === true', () => {
+          expect(evaluate(['has', 1])).to.equal(true);
+        })
         it('["exists", 1] === true', () => {
           expect(evaluate(['exists', 1])).to.equal(true);
         });
@@ -163,6 +166,20 @@ describe('json-filter-expressions', () => {
         it('["none", ["==", 1, 2], ["==", 1, 2]] === true', () => {
           expect(evaluate(['none', ['==', 1, 2], ['==', 1, 2]])).to.equal(true);
         });
+      });
+    });
+    describe('when supplying a target', () => {
+      it('["in", "numbers", 1] === true', () => {
+        expect(evaluate(['in', 'numbers', 1], { numbers: [1, 2] })).to.equal(true);
+      });
+      it('["has", "numbers"] === true', () => {
+        expect(evaluate(['has', 'numbers'], { numbers: [1, 2] })).to.equal(true);
+      });
+      it('["!have", "numbers"] === true', () => {
+        expect(evaluate(['!have', 'numbers'], { letters: ['a'] })).to.equal(true);
+      });
+      it('["have", "numbers"] === false', () => {
+        expect(evaluate(['have', 'numbers'], { letters: ['a'] })).to.equal(false);
       });
     });
   });

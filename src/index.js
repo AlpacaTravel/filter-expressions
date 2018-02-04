@@ -20,9 +20,13 @@ const evaluate = (condition, target = null) => {
   // Evaluate the condition
   switch (condition[0].toLowerCase()) {
     // Existence
+    case 'has':
+    case 'have':
     case 'exists':
     case 'exist':
       return ((typeof comparative !== 'undefined' && comparative !== null));
+    case '!has':
+    case '!have':
     case '!exist':
     case '!exists':
       return ((typeof comparative === 'undefined' || comparative === null));
