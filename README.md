@@ -12,16 +12,20 @@ import { evaluate } from 'json-filter-expressions';
 
 // JSON definition of filter
 const json = {
-  "filter": ["all", ["==", "type", "document"], ["in", "tags", "example", "other"]]
-}
+  "filter": [
+    "all",
+    ["==", "type", "document"],
+    ["in", "tags", "example", "other"]
+  ]
+};
 
 // Example objects
 const objects = [
-  { type: "document", src: "https://alpacamaps/document1.json", tags: ["example"] },
-  { type: "document", src: "https://alpacamaps/document2.json", tags: ["something"] },
-  { type: "document", src: "https://alpacamaps/document3.json", tags: ["other"] },
-  { type: "image", src: "https://alpacamaps/image.png", tags: ["example"] }
-]
+  { type: 'document', tags: ['example'], src: 'https://alpacamaps/document1.json' },
+  { type: 'document', tags: ['something'], src: 'https://alpacamaps/document2.json' },
+  { type: 'document', tags: ['other'], src: 'https://alpacamaps/document3.json' },
+  { type: 'image', tags: ['example'], src: 'https://alpacamaps/image.png' }
+];
 
 // Match the objects
 const matched = evaluate(json.filter, objects);
@@ -39,7 +43,7 @@ You can add this using NPM
 $ npm install json-filter-expressions
 ```
 
-## Supported Evaluators
+## Supported Operators
 
 * Existence: exists / exist / !exists / !exist
 * Comparison: == / != / > / >= / < / <=
