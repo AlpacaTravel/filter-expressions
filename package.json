@@ -1,0 +1,36 @@
+{
+  "name": "json-filter-expressions",
+  "version": "0.0.1",
+  "description": "Basic array structure that can conditionally validate objects",
+  "main": "index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "compile": "babel -d dist/ src/",
+    "prepublish": "npm run compile",
+    "test": "mocha"
+  },
+  "repository": "https://github.com/AlpacaTravel/json-filter-expressions.git",
+  "keywords": [
+    "json",
+    "filter",
+    "conditional",
+    "expressions"
+  ],
+  "author": "Cam Manderson (cam@alpaca.travel)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/AlpacaTravel/json-filter-expressions/issues"
+  },
+  "homepage": "https://github.com/AlpacaTravel/json-filter-expressions#readme",
+  "dependencies": {
+    "lodash.isequal": "^4.5.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0"
+  }
+}
