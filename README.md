@@ -1,6 +1,6 @@
 # Overview
 
-Simple util  to provide the ability to evaluate targets based on simple evaluation conditions expressed as arrays.
+Simple util  to provide the ability to evaluate targets based on simple evaluation conditions expressed as arrays. Primarily created so that external JSON files can express conditional expressions.
 
 ## Example
 
@@ -8,7 +8,7 @@ The below example shows the simple filter expressions on a collection.
 
 ```javascript
 // Import evaluate from the library
-import { evaluate } from 'json-filter-expressions';
+import { evaluate } from 'filter-expressions';
 
 // JSON definition of filter
 const json = {
@@ -40,7 +40,7 @@ const matched = evaluate(json.filter, objects);
 You can add this using NPM
 
 ```
-$ npm install json-filter-expressions
+$ npm install filter-expressions
 ```
 
 ## Supported Operators
@@ -54,4 +54,4 @@ $ npm install json-filter-expressions
 
 * Comparisons are done as using lodash "isEqual".
 * Run npm t to run tests
-* Inspired based on mapbox style filters
+* Inspired based on Mapbox style filters

@@ -1,5 +1,5 @@
 {
-  "name": "json-filter-expressions",
+  "name": "filter-expressions",
   "version": "0.0.1",
   "description": "Basic array structure that can conditionally validate objects",
   "main": "index.js",
@@ -11,7 +11,7 @@
     "prepublish": "npm run compile",
     "test": "mocha"
   },
-  "repository": "https://github.com/AlpacaTravel/json-filter-expressions.git",
+  "repository": "https://github.com/AlpacaTravel/filter-expressions.git",
   "keywords": [
     "json",
     "filter",
@@ -21,9 +21,9 @@
   "author": "Cam Manderson (cam@alpaca.travel)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AlpacaTravel/json-filter-expressions/issues"
+    "url": "https://github.com/AlpacaTravel/filter-expressions/issues"
   },
-  "homepage": "https://github.com/AlpacaTravel/json-filter-expressions#readme",
+  "homepage": "https://github.com/AlpacaTravel/filter-expressions#readme",
   "dependencies": {
     "lodash.isequal": "^4.5.0"
   },
