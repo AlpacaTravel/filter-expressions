@@ -31,6 +31,14 @@ const matched = evaluate(json.filter, objects);
 // ]
 ```
 
+## Installation
+
+You can add this using NPM
+
+```
+$ npm install json-filter-expressions
+```
+
 ## Supported Evaluators
 
 * Existence: exists / exist / !exists / !exist
