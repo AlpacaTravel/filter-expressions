@@ -1,4 +1,9 @@
 const isEqual = require('lodash.isequal');
+const turfBooleanWithin = require('@turf/boolean-within').default;
+const turfBooleanContains = require('@turf/boolean-contains').default;
+const turfBooleanDisjoint = require('@turf/boolean-disjoint').default;
+const turfBooleanCrosses = require('@turf/boolean-crosses').default;
+const turfBooleanOverlap = require('@turf/boolean-overlap').default;
 
 const evaluate = (condition, target = null) => {
   if (typeof condition === 'boolean') {
@@ -80,6 +85,38 @@ const evaluate = (condition, target = null) => {
     }
     case 'none': {
       return !condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target)), false);
+    }
+
+    // Geo evaluation
+    case 'geo-within': {
+      return turfBooleanWithin(condition[1], condition[2]);
+    }
+    case '!geo-within': {
+      return !turfBooleanWithin(condition[1], condition[2]);
+    }
+    case 'geo-contains': {
+      return turfBooleanContains(condition[1], condition[2]);
+    }
+    case '!geo-contains': {
+      return !turfBooleanContains(condition[1], condition[2]);
+    }
+    case 'geo-disjoint': {
+      return turfBooleanDisjoint(condition[1], condition[2]);
+    }
+    case '!geo-disjoint': {
+      return !turfBooleanDisjoint(condition[1], condition[2]);
+    }
+    case 'geo-crosses': {
+      return turfBooleanCrosses(condition[1], condition[2]);
+    }
+    case '!geo-crosses': {
+      return !turfBooleanCrosses(condition[1], condition[2]);
+    }
+    case 'geo-overlap': {
+      return turfBooleanOverlap(condition[1], condition[2]);
+    }
+    case '!geo-overlap': {
+      return !turfBooleanOverlap(condition[1], condition[2]);
     }
 
     // Otherwise ...

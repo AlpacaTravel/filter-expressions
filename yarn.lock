@@ -2,6 +2,174 @@
 # yarn lockfile v1
 
 
+"@turf/bbox@*", "@turf/bbox@6.x":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/bbox/-/bbox-6.0.0.tgz#590c68239a284ba0a0e4ecb01ffe10d8fe264d08"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+
+"@turf/bearing@*":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/bearing/-/bearing-5.1.5.tgz#7a0b790136c4ef4797f0246305d45cbe2d27b3f7"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/invariant" "^5.1.5"
+
+"@turf/boolean-contains@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-contains/-/boolean-contains-6.0.0.tgz#63535cd00aeced728085cc5f702722eb204f1591"
+  dependencies:
+    "@turf/bbox" "6.x"
+    "@turf/boolean-point-in-polygon" "6.x"
+    "@turf/boolean-point-on-line" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/boolean-crosses@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-crosses/-/boolean-crosses-6.0.0.tgz#75b1b1ca90206c8b5e146ffd0d78983067c10d2e"
+  dependencies:
+    "@turf/boolean-point-in-polygon" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/line-intersect" "6.x"
+    "@turf/polygon-to-line" "6.x"
+
+"@turf/boolean-disjoint@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-disjoint/-/boolean-disjoint-6.0.0.tgz#09d0b846438ccd87525310702b4497cd7ef4ade7"
+  dependencies:
+    "@turf/boolean-point-in-polygon" "6.0.0"
+    "@turf/helpers" "6.x"
+    "@turf/line-intersect" "6.x"
+    "@turf/meta" "6.x"
+    "@turf/polygon-to-line" "6.x"
+
+"@turf/boolean-overlap@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-overlap/-/boolean-overlap-6.0.0.tgz#eb015df81639aaf75a7e2954dfd07f7d04dec3d6"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/line-intersect" "6.x"
+    "@turf/line-overlap" "6.x"
+    "@turf/meta" "6.x"
+    geojson-equality "0.1.6"
+
+"@turf/boolean-point-in-polygon@6.0.0", "@turf/boolean-point-in-polygon@6.x":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-point-in-polygon/-/boolean-point-in-polygon-6.0.0.tgz#3ddb1b8f23e52802e1df9cf04e2d29b859fb5718"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/boolean-point-on-line@6.x":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-point-on-line/-/boolean-point-on-line-6.0.0.tgz#2d5ed23507b2bf88d37da38a3e696170a1b996df"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/boolean-within@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-within/-/boolean-within-6.0.0.tgz#359f723daa0ef027f930f8b41b61302670bf15c8"
+  dependencies:
+    "@turf/bbox" "6.x"
+    "@turf/boolean-point-in-polygon" "6.x"
+    "@turf/boolean-point-on-line" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/destination@*":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/destination/-/destination-6.0.0.tgz#c6ace5b7e3bf068f66fd7d8ecd01baa9143b2d47"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/distance@*":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-6.0.0.tgz#a1e8cf1240537d29cc2d553c48f315063e96c1f3"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
+"@turf/helpers@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-6.0.1.tgz#625112616159e519033dc5d24c094ccbce7a457f"
+
+"@turf/helpers@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-5.1.5.tgz#153405227ab933d004a5bb9641a9ed999fcbe0cf"
+
+"@turf/invariant@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-6.0.1.tgz#45581b41f82d91b682cef427e897c840d1741757"
+  dependencies:
+    "@turf/helpers" "6.x"
+
+"@turf/invariant@^5.1.5":
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-5.2.0.tgz#f0150ff7290b38577b73d088b7932c1ee0aa90a7"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+
+"@turf/line-intersect@6.x":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/line-intersect/-/line-intersect-6.0.0.tgz#90e7d718c98ef58211acc20fe35c779862717bc8"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/line-segment" "6.x"
+    "@turf/meta" "6.x"
+    geojson-rbush "3.x"
+
+"@turf/line-overlap@6.x":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/line-overlap/-/line-overlap-6.0.0.tgz#c76dfefe61c5829054a69ccaaecd851730b5efb0"
+  dependencies:
+    "@turf/boolean-point-on-line" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/line-segment" "6.x"
+    "@turf/meta" "6.x"
+    "@turf/nearest-point-on-line" "6.x"
+    geojson-rbush "3.x"
+
+"@turf/line-segment@6.x":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@turf/line-segment/-/line-segment-6.0.0.tgz#d06d4c4d5773df7bd930ca92ab68ed3873bc48e7"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/meta" "6.x"
+
+"@turf/meta@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.1.tgz#cf6f3f2263a3d24fc8d6a7e90f0420bbc44c090d"
+  dependencies:
+    "@turf/helpers" "6.x"
+
+"@turf/nearest-point-on-line@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/nearest-point-on-line/-/nearest-point-on-line-6.0.1.tgz#e79b2ae29d3e030ceef74a42239b31bed5253b34"
+  dependencies:
+    "@turf/bearing" "*"
+    "@turf/destination" "*"
+    "@turf/distance" "*"
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+    "@turf/line-intersect" "6.x"
+    "@turf/meta" "6.x"
+
+"@turf/polygon-to-line@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/polygon-to-line/-/polygon-to-line-6.0.1.tgz#573f0cbf359cc9b562c57b0591e8ca148e432692"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -389,6 +557,10 @@ deep-eql@^3.0.0:
   dependencies:
     type-detect "^4.0.0"
 
+deep-equal@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.0.1.tgz#f5d260292b660e084eff4cdbc9f08ad3247448b5"
+
 deep-extend@~0.4.0:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
@@ -539,6 +711,21 @@ gauge@~2.7.3:
     string-width "^1.0.1"
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
+
+geojson-equality@0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/geojson-equality/-/geojson-equality-0.1.6.tgz#a171374ef043e5d4797995840bae4648e0752d72"
+  dependencies:
+    deep-equal "^1.0.0"
+
+geojson-rbush@3.x:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/geojson-rbush/-/geojson-rbush-3.1.1.tgz#dd40bdd26e92813d888d7b489e8d2980695a49b4"
+  dependencies:
+    "@turf/bbox" "*"
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
+    rbush "*"
 
 get-func-name@^2.0.0:
   version "2.0.0"
@@ -1015,12 +1202,22 @@ qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
+quickselect@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-1.0.1.tgz#1e6ceaa9db1ca7c75aafcc863c7bef2037ca62a1"
+
 randomatic@^1.1.3:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/randomatic/-/randomatic-1.1.7.tgz#c7abe9cc8b87c0baa876b19fde83fd464797e38c"
   dependencies:
     is-number "^3.0.0"
     kind-of "^4.0.0"
+
+rbush@*:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/rbush/-/rbush-2.0.2.tgz#bb6005c2731b7ba1d5a9a035772927d16a614605"
+  dependencies:
+    quickselect "^1.0.1"
 
 rc@^1.1.7:
   version "1.2.5"

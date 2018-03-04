@@ -182,5 +182,67 @@ describe('json-filter-expressions', () => {
         expect(evaluate(['have', 'numbers'], { letters: ['a'] })).to.equal(false);
       });
     });
+    describe('when supplying geo based conditions', () => {
+      describe('using "geo-within"', () => {
+        it('["geo-within", geoA, geoB]', () => {
+          const geoA = { type: 'Point', coordinates: [1, 2] };
+          const geoB = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          expect(evaluate(['geo-within', geoA, geoB])).to.equal(true);
+        });
+        it('["!geo-within", geoA, geoB]', () => {
+          const geoA = { type: 'Point', coordinates: [2, 1] };
+          const geoB = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          expect(evaluate(['!geo-within', geoA, geoB])).to.equal(true);
+        });
+      });
+      describe('using "geo-contains"', () => {
+        it('["geo-contains", geoA, geoB]', () => {
+          const geoA = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          const geoB = { type: 'Point', coordinates: [1, 2] };
+          expect(evaluate(['geo-contains', geoA, geoB])).to.equal(true);
+        });
+        it('["!geo-contains", geoA, geoB]', () => {
+          const geoA = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          const geoB = { type: 'Point', coordinates: [2, 1] };
+          expect(evaluate(['!geo-contains', geoA, geoB])).to.equal(true);
+        });
+      });
+      describe('using "geo-disjoint"', () => {
+        it('["geo-disjoint", geoA, geoB]', () => {
+          const geoA = { type: 'Point', coordinates: [2, 1] };
+          const geoB = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          expect(evaluate(['geo-disjoint', geoA, geoB])).to.equal(true);
+        });
+        it('["!geo-disjoint", geoA, geoB]', () => {
+          const geoA = { type: 'Point', coordinates: [1, 2] };
+          const geoB = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          expect(evaluate(['!geo-disjoint', geoA, geoB])).to.equal(true);
+        });
+      });
+      describe('using "geo-crosses"', () => {
+        it('["geo-crosses", geoA, geoB]', () => {
+          const geoA = { type: 'LineString', coordinates: [[-2, 2], [4, 2]] };
+          const geoB = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          expect(evaluate(['geo-crosses', geoA, geoB])).to.equal(true);
+        });
+        it('["!geo-crosses", geoA, geoB]', () => {
+          const geoA = { type: 'LineString', coordinates: [[-2, -2], [-4, -4]] };
+          const geoB = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
+          expect(evaluate(['!geo-crosses', geoA, geoB])).to.equal(true);
+        });
+      });
+      describe('using "geo-overlap"', () => {
+        it('["geo-overlap", geoA, geoB]', () => {
+          const geoA = { type: 'Polygon', coordinates: [[[0, 0], [0,5], [5, 5], [5, 0], [0, 0]]] };
+          const geoB = { type: 'Polygon', coordinates: [[[1, 1], [1, 6], [6, 6], [6, 1], [1, 1]]] };
+          expect(evaluate(['geo-overlap', geoA, geoB])).to.equal(true);
+        });
+        it('["!geo-overlap", geoA, geoB]', () => {
+          const geoA = { type: 'Polygon', coordinates: [[[1, 1], [1, 6], [6, 6], [6, 1], [1, 1]]] };
+          const geoB = { type: 'Polygon', coordinates: [[[10, 10], [10, 15], [15, 15], [15, 10], [10, 10]]] };
+          expect(evaluate(['!geo-overlap', geoA, geoB])).to.equal(true);
+        });
+      });
+    });
   });
 });
