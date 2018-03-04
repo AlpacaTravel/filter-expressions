@@ -28,7 +28,7 @@ const objects = [
 ];
 
 // Match the objects
-const matched = evaluate(json.filter, objects);
+const matched = objects.filter(obj => evaluate(json.filter, obj));
 // Returns [
 //   { type: "document", src: "https://alpacamaps/document1.json", tags: ["example"] },
 //   { type: "document", src: "https://alpacamaps/document3.json", tags: ["other"] }
