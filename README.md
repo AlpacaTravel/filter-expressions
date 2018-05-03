@@ -43,13 +43,53 @@ You can add this using NPM
 $ npm install filter-expressions
 ```
 
-## Supported Operators
+## Supported Comparison Operators
 
 * Existence: exists / exist / !exists / !exist
 * Comparison: == / != / > / >= / < / <=
 * Membership: in / !in
 * Combining: all / any / none
 * Geospatial comparisons: geo-within / geo-contains / geo-disjoint / geo-crosses / geo-overlap
+
+## Extensions
+
+### Custom Comparison Operators
+
+You can provide your own comparison operator implementations.
+
+```javascript
+import { evaluate } from 'filter-expressions';
+
+const options = {
+  comparisons: {
+    custom: (a, b) => a === b,
+  },
+};
+
+// evaluate(expression, object, [options])
+const result = evaluate(['custom', 'foo', 'bar'], { 'foo': 'bar' }, options);
+
+console.log(result); // Prints true
+```
+
+### Custom Value Modifiers
+
+You can implement your own value modifiers.
+
+```javascript
+import { evaluate } from 'filter-expressions';
+
+const options = {
+  modifiers: {
+    not: (val) => !val,
+  },
+};
+
+// evaluate(expression, object, [options])
+const result = evaluate(['==', 'not(a)', false], { a: true }, options);
+
+console.log(result); // Prints true
+```
 
 ## Notes
 
