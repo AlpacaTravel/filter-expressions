@@ -5,7 +5,9 @@ const turfBooleanDisjoint = require('@turf/boolean-disjoint').default;
 const turfBooleanCrosses = require('@turf/boolean-crosses').default;
 const turfBooleanOverlap = require('@turf/boolean-overlap').default;
 
-const evaluate = (condition, target = null) => {
+const modifier = /^(.+)\(([^\)]+)\)$/;
+
+const evaluate = (condition, target = null, options = {}) => {
   if (typeof condition === 'boolean') {
     return condition;
   }
@@ -20,7 +22,18 @@ const evaluate = (condition, target = null) => {
   }
 
   // Identify the comparative target
-  const comparative = target ? target[condition[1]] : condition[1];
+  let comparative = target ? target[condition[1]] : condition[1];
+
+  // Support function modifiers
+  if (modifier.test(condition[1]) && options && options.modifiers) {
+    const modifierParts = condition[1].match(modifier);
+    const modifierFunc = modifierParts[1];
+    const modifierVal = modifierParts[2];
+    if (options.modifiers[modifierFunc]) {
+      let value = target ? target[modifierVal] : modifierVal;
+      comparative = options.modifiers[modifierFunc](value, target);
+    }
+  }
 
   // Evaluate the condition
   switch (condition[0].toLowerCase()) {
@@ -78,49 +91,73 @@ const evaluate = (condition, target = null) => {
 
     // Combining
     case 'all': {
-      return condition.slice(1).reduce((carry, cond) => (carry && evaluate(cond, target)), true);
+      return condition.slice(1).reduce((carry, cond) => (carry && evaluate(cond, target, options)), true);
     }
     case 'any': {
-      return condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target)), false);
+      return condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target, options)), false);
     }
     case 'none': {
-      return !condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target)), false);
+      return !condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target, options)), false);
     }
 
     // Geo evaluation
     case 'geo-within': {
-      return turfBooleanWithin(condition[1], condition[2]);
+      return turfBooleanWithin(comparative, condition[2]);
     }
     case '!geo-within': {
-      return !turfBooleanWithin(condition[1], condition[2]);
+      return !turfBooleanWithin(comparative, condition[2]);
     }
     case 'geo-contains': {
-      return turfBooleanContains(condition[1], condition[2]);
+      return turfBooleanContains(comparative, condition[2]);
     }
     case '!geo-contains': {
-      return !turfBooleanContains(condition[1], condition[2]);
+      return !turfBooleanContains(comparative, condition[2]);
     }
     case 'geo-disjoint': {
-      return turfBooleanDisjoint(condition[1], condition[2]);
+      return turfBooleanDisjoint(comparative, condition[2]);
     }
     case '!geo-disjoint': {
-      return !turfBooleanDisjoint(condition[1], condition[2]);
+      return !turfBooleanDisjoint(comparative, condition[2]);
     }
     case 'geo-crosses': {
-      return turfBooleanCrosses(condition[1], condition[2]);
+      return turfBooleanCrosses(comparative, condition[2]);
     }
     case '!geo-crosses': {
-      return !turfBooleanCrosses(condition[1], condition[2]);
+      return !turfBooleanCrosses(comparative, condition[2]);
     }
     case 'geo-overlap': {
-      return turfBooleanOverlap(condition[1], condition[2]);
+      return turfBooleanOverlap(comparative, condition[2]);
     }
     case '!geo-overlap': {
-      return !turfBooleanOverlap(condition[1], condition[2]);
+      return !turfBooleanOverlap(comparative, condition[2]);
     }
 
     // Otherwise ...
     default:
+      // Support pluggable comparisons
+      if (options && options.comparisons) {
+        const keyLower = condition[0].toLowerCase();
+
+        // Look fro the comparison
+        let func = options.comparisons[keyLower];
+        let inverse = false;
+
+        // Look for an inverse condition
+        if (!func && keyLower[0] === '!') {
+          inverse = true;
+          func = options.comparisons[keyLower.substr(1)];
+        }
+
+        // Check the result
+        if (typeof func === 'function') {
+          if (func(comparative, ...condition.slice(2))) {
+            return inverse ? false : true;
+          } else {
+            return inverse ? true : false;
+          }
+        }
+      }
+
       return false;
   }
 };
