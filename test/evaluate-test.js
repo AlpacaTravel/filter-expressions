@@ -244,5 +244,32 @@ describe('json-filter-expressions', () => {
         });
       });
     });
+    describe('using options', () => {
+      describe('with modifiers', () => {
+        it('will use a matching modifier', () => {
+          expect(
+            evaluate(['==', 'not(a)', false], { a: true }, {
+              modifiers: { not: (val) => (!val) },
+            })
+          ).to.equal(true);
+        });
+      });
+      describe('with operators', () => {
+        it('will use a matching operator', () => {
+          expect(
+            evaluate(['custom', 'a', true], { a: true }, {
+              comparisons: { custom: (a, b) => (a == b) },
+            })
+          ).to.equal(true);
+        });
+        it('will use an inverse matching operator', () => {
+          expect(
+            evaluate(['!custom', 'a', true], { a: true }, {
+              comparisons: { custom: (a, b) => (a == b) },
+            })
+          ).to.equal(false);
+        });
+      });
+    });
   });
 });
