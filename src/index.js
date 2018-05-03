@@ -25,7 +25,7 @@ const evaluate = (condition, target = null, options = {}) => {
   let comparative = target ? target[condition[1]] : condition[1];
 
   // Support function modifiers
-  if (modifier.test(condition[1]) && options && options.modifiers) {
+  if (modifier.test(condition[1]) && typeof condition[1] === 'string' && options && options.modifiers) {
     const modifierParts = condition[1].match(modifier);
     const modifierFunc = modifierParts[1];
     const modifierVal = modifierParts[2];

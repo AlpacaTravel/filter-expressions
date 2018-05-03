@@ -253,6 +253,13 @@ describe('json-filter-expressions', () => {
             })
           ).to.equal(true);
         });
+        it('will user a matching modifier in collection', () => {
+          expect(
+            evaluate(['all', ['==', 'not(a)', false]], { a: true }, {
+              modifiers: { not: (val) => (!val) },
+            })
+          ).to.equal(true);
+        });
       });
       describe('with operators', () => {
         it('will use a matching operator', () => {
