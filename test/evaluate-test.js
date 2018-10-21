@@ -261,15 +261,15 @@ describe('json-filter-expressions', () => {
           ).to.equal(true);
         });
       });
-      describe('with operators', () => {
-        it('will use a matching operator', () => {
+      describe('with comparisons', () => {
+        it('will use a matching comparison', () => {
           expect(
             evaluate(['custom', 'a', true], { a: true }, {
               comparisons: { custom: (a, b) => (a == b) },
             })
           ).to.equal(true);
         });
-        it('will use an inverse matching operator', () => {
+        it('will use an inverse matching comparison', () => {
           expect(
             evaluate(['!custom', 'a', true], { a: true }, {
               comparisons: { custom: (a, b) => (a == b) },
@@ -277,6 +277,32 @@ describe('json-filter-expressions', () => {
           ).to.equal(false);
         });
       });
+      describe('with operators', () => {
+        it('will use a operator', () => {
+          expect(
+            evaluate(['at', '1', [2, 4, 6]], {}, {
+              operators: { at: (context, index, array) => array && array[index] }
+            })
+          ).to.equal(4);
+        });
+        it('will use a operator within expressions', () => {
+          expect(
+            evaluate(['==', ['at', '1', [2, 4, 6]], 4], {}, {
+              operators: { at: (target, index, array) => array && array[index] }
+            })
+          ).to.equal(true);
+          expect(
+            evaluate(['num', 'foo'], { foo: 4 }, {
+              operators: { num: (target, a) => Number(target[a]) }
+            })
+          ).to.equal(4);
+          expect(
+            evaluate(['to-number', '4'], {}, {
+              operators: { 'to-number': (target, a) => Number(a) }
+            })
+          ).to.equal(4);
+        });
+      })
     });
   });
 });

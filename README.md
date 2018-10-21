@@ -1,6 +1,6 @@
 # Overview
 
-Simple util  to provide the ability to evaluate targets based on simple evaluation conditions expressed as arrays. Primarily created so that external JSON files can express conditional expressions.
+Simple util to provide the ability to evaluate targets based on simple evaluation conditions expressed as arrays. Primarily created so that external JSON files can express conditional expressions.
 
 ## Example
 
@@ -89,6 +89,24 @@ const options = {
 const result = evaluate(['==', 'not(a)', false], { a: true }, options);
 
 console.log(result); // Prints true
+```
+
+### Custom Operators
+
+You can implement custom operators to perform transformations
+
+```javascript
+import { evaluate } from 'filter-expressions';
+
+const options = {
+  operators: {
+    at: (target, index, array) => array && array[index],
+    'to-number': (target, val) => Number(val),
+  },
+};
+
+console.log(evaluate(['at', 1, [2, 4, 6]])); // Prints 4
+console.log(evaluate(['to-number', '4'])); // Prints 4
 ```
 
 ## Notes

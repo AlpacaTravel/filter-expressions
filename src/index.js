@@ -7,26 +7,37 @@ const turfBooleanOverlap = require('@turf/boolean-overlap').default;
 
 const modifier = /^(.+)\(([^\)]+)\)$/;
 
-const evaluate = (condition, target = null, options = {}) => {
-  if (typeof condition === 'boolean') {
-    return condition;
+// Evaluate an expression
+const evaluate = (expression, target = null, options = {}) => {
+  // If the supplied expression is resolved
+  if (typeof expression === 'boolean') {
+    return expression;
   }
-  if (!Array.isArray(condition)) {
-    return false;
+  // Expressions are arrays
+  if (!Array.isArray(expression)) {
+    return expression;
   }
-  if (condition.length < 2) {
-    return false;
+  // Expressions should have more than 2 values
+  if (expression.length < 2) {
+    return expression;
   }
-  if (typeof condition[0] !== 'string') {
-    return false;
+  // Expressions start with a string in teh array
+  if (typeof expression[0] !== 'string') {
+    return expression;
   }
+
+  // Resolve the expressions
+  // ... each part of an expression is possible to be evaluated..
+  const resolvedExpressions = expression.map(expr => evaluate(expr, target, options));
 
   // Identify the comparative target
-  let comparative = target ? target[condition[1]] : condition[1];
+  // ... targets can allow you to extract from context..
+  let comparative = (target && target[resolvedExpressions[1]]) || resolvedExpressions[1];
 
   // Support function modifiers
-  if (modifier.test(condition[1]) && typeof condition[1] === 'string' && options && options.modifiers) {
-    const modifierParts = condition[1].match(modifier);
+  // ... you can modify values.. e.g. not(a)
+  if (modifier.test(resolvedExpressions[1]) && typeof resolvedExpressions[1] === 'string' && options && options.modifiers) {
+    const modifierParts = expression[1].match(modifier);
     const modifierFunc = modifierParts[1];
     const modifierVal = modifierParts[2];
     if (options.modifiers[modifierFunc]) {
@@ -35,41 +46,46 @@ const evaluate = (condition, target = null, options = {}) => {
     }
   }
 
-  // Evaluate the condition
-  switch (condition[0].toLowerCase()) {
+  // Evaluate the expression
+  switch (resolvedExpressions[0].toLowerCase()) {
     // Existence
     case 'has':
     case 'have':
     case 'exists':
-    case 'exist':
-      return ((typeof comparative !== 'undefined' && comparative !== null));
+    case 'exist': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return ((typeof t !== 'undefined' && t !== null));
+    }
+
     case '!has':
     case '!have':
     case '!exist':
-    case '!exists':
-      return ((typeof comparative === 'undefined' || comparative === null));
+    case '!exists': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return ((typeof t === 'undefined' || t === null));
+    }
 
-    // Comparison Conditions
+    // Comparison expressions
     case '==':
-      return (isEqual(comparative, condition[2]));
+      return (isEqual(comparative, resolvedExpressions[2]));
     case '!=':
-      return (!isEqual(comparative, condition[2]));
+      return (!isEqual(comparative, resolvedExpressions[2]));
     case '>':
     case '>=':
     case '<':
     case '<=': {
-      if (typeof comparative !== 'number' || typeof condition[2] !== 'number') {
+      if (typeof comparative !== 'number' || typeof resolvedExpressions[2] !== 'number') {
         return false;
       }
-      switch (condition[0]) {
+      switch (expression[0]) {
         case '>':
-          return (comparative > condition[2]);
+          return (comparative > resolvedExpressions[2]);
         case '>=':
-          return (comparative >= condition[2]);
+          return (comparative >= resolvedExpressions[2]);
         case '<':
-          return (comparative < condition[2]);
+          return (comparative < resolvedExpressions[2]);
         case '<=':
-          return (comparative <= condition[2]);
+          return (comparative <= resolvedExpressions[2]);
         default:
           return false;
       }
@@ -78,87 +94,101 @@ const evaluate = (condition, target = null, options = {}) => {
     // Membership
     case 'in': {
       if (Array.isArray(comparative)) {
-        return comparative.reduce((carry, comp) => carry || condition.slice(2).indexOf(comp) > -1, false);
+        return comparative.reduce((carry, comp) => carry || expression.slice(2).indexOf(comp) > -1, false);
       }
-      return condition.slice(2).indexOf(comparative) > -1;
+      return expression.slice(2).indexOf(comparative) > -1;
     }
     case '!in': {
       if (Array.isArray(comparative)) {
-        return comparative.reduce((carry, comp) => carry || condition.slice(2).indexOf(comp) === -1, false);
+        return comparative.reduce((carry, comp) => carry || expression.slice(2).indexOf(comp) === -1, false);
       }
-      return condition.slice(2).indexOf(comparative) === -1;
+      return expression.slice(2).indexOf(comparative) === -1;
     }
 
     // Combining
     case 'all': {
-      return condition.slice(1).reduce((carry, cond) => (carry && evaluate(cond, target, options)), true);
+      return resolvedExpressions.slice(1).reduce((carry, expr) => (carry && expr === true), true);
     }
     case 'any': {
-      return condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target, options)), false);
+      return resolvedExpressions.slice(1).reduce((carry, expr) => (carry || expr === true), false);
     }
     case 'none': {
-      return !condition.slice(1).reduce((carry, cond) => (carry || evaluate(cond, target, options)), false);
+      return !resolvedExpressions.slice(1).reduce((carry, expr) => (carry || expr === true), false);
     }
 
     // Geo evaluation
     case 'geo-within': {
-      return turfBooleanWithin(comparative, condition[2]);
+      return turfBooleanWithin(comparative, resolvedExpressions[2]);
     }
     case '!geo-within': {
-      return !turfBooleanWithin(comparative, condition[2]);
+      return !turfBooleanWithin(comparative, resolvedExpressions[2]);
     }
     case 'geo-contains': {
-      return turfBooleanContains(comparative, condition[2]);
+      return turfBooleanContains(comparative, resolvedExpressions[2]);
     }
     case '!geo-contains': {
-      return !turfBooleanContains(comparative, condition[2]);
+      return !turfBooleanContains(comparative, resolvedExpressions[2]);
     }
     case 'geo-disjoint': {
-      return turfBooleanDisjoint(comparative, condition[2]);
+      return turfBooleanDisjoint(comparative, resolvedExpressions[2]);
     }
     case '!geo-disjoint': {
-      return !turfBooleanDisjoint(comparative, condition[2]);
+      return !turfBooleanDisjoint(comparative, resolvedExpressions[2]);
     }
     case 'geo-crosses': {
-      return turfBooleanCrosses(comparative, condition[2]);
+      return turfBooleanCrosses(comparative, resolvedExpressions[2]);
     }
     case '!geo-crosses': {
-      return !turfBooleanCrosses(comparative, condition[2]);
+      return !turfBooleanCrosses(comparative, resolvedExpressions[2]);
     }
     case 'geo-overlap': {
-      return turfBooleanOverlap(comparative, condition[2]);
+      return turfBooleanOverlap(comparative, resolvedExpressions[2]);
     }
     case '!geo-overlap': {
-      return !turfBooleanOverlap(comparative, condition[2]);
+      return !turfBooleanOverlap(comparative, resolvedExpressions[2]);
     }
 
     // Otherwise ...
     default:
       // Support pluggable comparisons
-      if (options && options.comparisons) {
-        const keyLower = condition[0].toLowerCase();
+      if (options) {
+        const keyLower = resolvedExpressions[0].toLowerCase();
 
-        // Look fro the comparison
-        let func = options.comparisons[keyLower];
+        // Look for the comparison
+        let func = options.comparisons && options.comparisons[keyLower];
         let inverse = false;
+        let type = 'comparison';
 
-        // Look for an inverse condition
+        // Look for an inverse comparison expression
         if (!func && keyLower[0] === '!') {
           inverse = true;
           func = options.comparisons[keyLower.substr(1)];
         }
 
+        // Look for an operator
+        if (!func && options.operators) {
+          func = options.operators[keyLower];
+          type = 'operator';
+        }
+
         // Check the result
         if (typeof func === 'function') {
-          if (func(comparative, ...condition.slice(2))) {
-            return inverse ? false : true;
-          } else {
-            return inverse ? true : false;
+          if (type === 'comparison') {
+            const value = func(comparative, ...resolvedExpressions.slice(2));
+            if (value) {
+              return inverse ? false : true;
+            } else {
+              return inverse ? true : false;
+            }
+          } else if (type === 'operator') {
+            const value = func(target, ...resolvedExpressions.slice(1));
+            // Return the actual result
+            return value;
           }
         }
       }
 
-      return false;
+      return resolvedExpressions;
   }
 };
 
