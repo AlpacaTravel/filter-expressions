@@ -136,6 +136,16 @@ describe('json-filter-expressions', () => {
         });
       });
     });
+    describe('value accessor', () => {
+      describe('using "get"', () => {
+        it('["get", 0]', () => {
+          expect(evaluate(['get', 0])).to.equal(0);
+        });
+        it('["get", "foo"], { foo: "bar" }', () => {
+          expect(evaluate(['get', 'foo'], { foo: 'bar' })).to.equal('bar');
+        });
+      })
+    })
     describe('when supplying combination conditions', () => {
       describe('using "all"', () => {
         it('["all", ["==", 1, 1], ["==", 1, 1]] === true', () => {
@@ -182,6 +192,14 @@ describe('json-filter-expressions', () => {
         expect(evaluate(['have', 'numbers'], { letters: ['a'] })).to.equal(false);
       });
     });
+    describe('when comparing two field values', () => {
+      it('["==", ["get", "foo"], ["get", "bar"]], { foo: 1, bar: 1 } === true', () => {
+        expect(evaluate(["==", ["get", "foo"], ["get", "bar"]], { foo: 1, bar: 1 })).to.equal(true);
+      });
+      it('["==", ["get", "foo"], ["get", "bar"]], { foo: 1, bar: 2 } === false', () => {
+        expect(evaluate(["==", ["get", "foo"], ["get", "bar"]], { foo: 1, bar: 2 })).to.equal(false);
+      });
+    })
     describe('when supplying geo based conditions', () => {
       describe('using "geo-within"', () => {
         it('["geo-within", geoA, geoB]', () => {

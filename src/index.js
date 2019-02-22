@@ -148,6 +148,12 @@ const evaluate = (expression, target = null, options = {}) => {
       return !turfBooleanOverlap(comparative, resolvedExpressions[2]);
     }
 
+    // Accessors
+    case 'get': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return t;
+    }
+
     // Otherwise ...
     default:
       // Support pluggable comparisons
