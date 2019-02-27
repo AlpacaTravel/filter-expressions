@@ -32,7 +32,10 @@ const evaluate = (expression, target = null, options = {}) => {
 
   // Identify the comparative target
   // ... targets can allow you to extract from context..
-  let comparative = (target && target[resolvedExpressions[1]]) || resolvedExpressions[1];
+  let comparative = resolvedExpressions[1];
+  if (target && typeof target[resolvedExpressions[1]] !== 'undefined') {
+    comparative = target[resolvedExpressions[1]];
+  }
 
   // Support function modifiers
   // ... you can modify values.. e.g. not(a)

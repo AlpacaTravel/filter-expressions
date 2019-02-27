@@ -320,7 +320,41 @@ describe('json-filter-expressions', () => {
             })
           ).to.equal(4);
         });
-      })
+      });
+      describe('more complex combinations', () => {
+        it('selects any safely', () => {
+          const context = {
+            ancestors: 0,
+            discriminator: 'collection',
+          };
+          const filter = [
+            'any',
+            // Adding as place to the top level collection
+            ['all', ['==', 'discriminator', 'collection'], ['==', 'ancestors', 0]],
+            // true,
+            // ['==', 'ancestors', 1],
+            // Adding to directions from the top level collection
+            // ['all', ['==', 'discriminator', 'directions'], ['==', 'ancestors', 2]]
+          ];
+          expect(evaluate(filter, context)).to.equal(true);
+        });
+        it('selects basic all', () => {
+          const context = {
+            ancestors: 0,
+            discriminator: 'collection',
+          };
+          const filter = ['all', ['==', 'discriminator', 'collection'], ['==', 'ancestors', 0]];
+          expect(evaluate(filter, context)).to.equal(true);
+        });
+        it('selects basic all', () => {
+          const context = {
+            ancestors: 0,
+            discriminator: 'collection',
+          };
+          const filter = ['==', 'ancestors', 0];
+          expect(evaluate(filter, context)).to.equal(true);
+        });
+      });
     });
   });
 });
