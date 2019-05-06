@@ -1,6 +1,6 @@
 {
   "name": "filter-expressions",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Basic array structure that can conditionally validate objects",
   "main": "index.js",
   "files": [
