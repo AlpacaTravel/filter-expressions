@@ -1,7 +1,7 @@
 const { expect } = require('chai');
-const { evaluate } = require('../src/index');
+const { evaluate } = require('../src/evaluation');
 
-describe('json-filter-expressions', () => {
+describe('filter-expressions', () => {
   describe('evaluate()', () => {
     describe('when supplying existential conditions', () => {
       describe('using "!exist"', () => {
