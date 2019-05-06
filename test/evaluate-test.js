@@ -19,6 +19,18 @@ describe('json-filter-expressions', () => {
         it('["has", 1] === true', () => {
           expect(evaluate(['has', 1])).to.equal(true);
         })
+        it('["has", 20] === true', () => {
+          expect(evaluate(['has', 20])).to.equal(true);
+        })
+        it('["has", "20"] === true', () => {
+          expect(evaluate(['has', "20"])).to.equal(true);
+        })
+        it('["has", { value: 20 }] === true', () => {
+          expect(evaluate(['has', { value: 20 }])).to.equal(true);
+        })
+        it('["has", [{ value: 20 }]] === true', () => {
+          expect(evaluate(['has', [{ value: 20 }]])).to.equal(true);
+        })
         it('["exists", 1] === true', () => {
           expect(evaluate(['exists', 1])).to.equal(true);
         });
@@ -213,6 +225,58 @@ describe('json-filter-expressions', () => {
           expect(evaluate(['!geo-within', geoA, geoB])).to.equal(true);
         });
       });
+      describe('using "geo-within" with polygon', () => {
+        it('["geo-within", geoA, geoB]', () => {
+          const geoA = {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Point",
+              "coordinates": [
+                31.289062500000004,
+                30.524413269923986
+              ]
+            }
+          };
+          const geoB = {
+            "type": "Feature",
+            "properties": {},
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [
+                    25.048828125,
+                    31.27855085894653
+                  ],
+                  [
+                    31.9921875,
+                    26.588527147308614
+                  ],
+                  [
+                    37.177734375,
+                    29.611670115197377
+                  ],
+                  [
+                    32.6953125,
+                    34.66935854524543
+                  ],
+                  [
+                    25.048828125,
+                    31.27855085894653
+                  ]
+                ]
+              ]
+            }
+          };
+          expect(evaluate(['geo-within', geoA, geoB])).to.equal(true);
+        });
+        it('["!geo-within", geoA, geoB]', () => {
+          const geoA = { type: 'Point', coordinates: [10, 10] };
+          const geoB = { type: 'Polygon', coordinates: [[1, 1], [1, 2], [2, 2], [2, 1], [1, 1]] };
+          expect(evaluate(['!geo-within', geoA, geoB])).to.equal(true);
+        });
+      });
       describe('using "geo-contains"', () => {
         it('["geo-contains", geoA, geoB]', () => {
           const geoA = { type: 'LineString', coordinates: [[1, 1], [1, 2], [1, 3], [1, 4]] };
@@ -322,7 +386,7 @@ describe('json-filter-expressions', () => {
         });
       });
       describe('more complex combinations', () => {
-        it('selects any safely', () => {
+        it('selects any - all safely', () => {
           const context = {
             ancestors: 0,
             discriminator: 'collection',
