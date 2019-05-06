@@ -108,6 +108,17 @@ const evaluate = (expression, target = null, options = {}) => {
       return expression.slice(2).indexOf(comparative) === -1;
     }
 
+    // String
+    case 'match': {
+      let [regex, flags, input=null] = resolvedExpressions.slice(1);
+      if (input === null) {
+        input = flags;
+        flags = undefined
+      }
+      regex = new RegExp(regex, flags);
+      return regex.test(input);
+    }
+
     // Combining
     case 'all': {
       return resolvedExpressions.slice(1).reduce((carry, expr) => (carry && expr === true), true);

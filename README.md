@@ -48,6 +48,7 @@ $ npm install filter-expressions
 * Existence: exists / exist / !exists / !exist
 * Comparison: == / != / > / >= / < / <=
 * Membership: in / !in
+* String Comparision: match
 * Combining: all / any / none
 * Geospatial comparisons: geo-within / geo-contains / geo-disjoint / geo-crosses / geo-overlap
 
