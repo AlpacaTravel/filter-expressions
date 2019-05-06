@@ -138,34 +138,39 @@ describe('json-filter-expressions', () => {
     });
     describe('when supplying string comparision conditions', () => {
       describe('using "match" without flags', () => {
-        it('["match", "start", "start middle end"] === true', () => {
-          expect(evaluate(["match", "start", "start middle end"])).to.equal(true);
+        it('["match", "start"] === true', () => {
+          expect(evaluate(["match", "start middle end", "start"])).to.equal(true);
         });
-        it('["match", "middle", "start middle end"] === true', () => {
-          expect(evaluate(["match", "middle", "start middle end"])).to.equal(true);
+        it('["match", "start middle end", "middle"] === true', () => {
+          expect(evaluate(["match", "start middle end", "middle"])).to.equal(true);
         });
-        it('["match", "end", "start middle end"] === true', () => {
-          expect(evaluate(["match", "end", "start middle end"])).to.equal(true);
+        it('["match", "start middle end", "end"] === true', () => {
+          expect(evaluate(["match", "start middle end", "end"])).to.equal(true);
         });
-        it('["match", "missing", "start middle end"] === false', () => {
-          expect(evaluate(["match", "missing", "start middle end"])).to.equal(false);
+        it('["match", "start middle end", "missing"] === false', () => {
+          expect(evaluate(["match", "start middle end", "missing"])).to.equal(false);
         });
-        it('["match", "start$", "start middle end"] === false', () => {
-          expect(evaluate(["match", "start$", "start middle end"])).to.equal(false);
+        it('["match", "start middle end", "start$"] === false', () => {
+          expect(evaluate(["match", "start middle end", "start$"])).to.equal(false);
         });
-        it('["match", "^end", "start middle end"] === false', () => {
-          expect(evaluate(["match", "^end", "start middle end"])).to.equal(false);
+        it('["match", "start middle end", "^end"] === false', () => {
+          expect(evaluate(["match", "start middle end", "^end"])).to.equal(false);
         });
-        it('["match", "/a\/b/", "aaa\/bbb"] === true', () => {
-          expect(evaluate(["match", "a\/b", "aaa\/bbb"])).to.equal(true);
+        it('["match", "aaa\/bbb", "/a\/b/"] === true', () => {
+          expect(evaluate(["match", "aaa\/bbb", "a\/b"])).to.equal(true);
         });
       });
       describe('using "match" with flags', () => {
-        it('["match", "START","i", "start middle end"] === true', () => {
-          expect(evaluate(["match", "START","i", "start middle end"])).to.equal(true);
+        it('["match", "start middle end", "START","i"] === true', () => {
+          expect(evaluate(["match", "start middle end", "START","i"])).to.equal(true);
         });
-        it('["match", "first$", "m", "first\nsecond"] === true', () => {
-          expect(evaluate(["match", "first$", "m", "first\nsecond"])).to.equal(true);
+        it('["match", "first\nsecond", "first$", "m"] === true', () => {
+          expect(evaluate(["match", "first\nsecond", "first$", "m"])).to.equal(true);
+        });
+      });
+      describe('using "match" when supplying a target', () => {
+        it('["match", "value", "regex"], {"regex": "don\'t use", "value": "match against regex"} === true', () => {
+          expect(evaluate(["match", "value", "regex"], {"regex": "don\'t use", "value": "match against regex"})).to.equal(true);
         });
       });
     });

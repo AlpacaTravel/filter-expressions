@@ -110,13 +110,8 @@ const evaluate = (expression, target = null, options = {}) => {
 
     // String
     case 'match': {
-      let [regex, flags, input=null] = resolvedExpressions.slice(1);
-      if (input === null) {
-        input = flags;
-        flags = undefined
-      }
-      regex = new RegExp(regex, flags);
-      return regex.test(input);
+      const [regex, flags=undefined] = resolvedExpressions.slice(2);
+      return new RegExp(regex, flags).test(comparative);
     }
 
     // Combining
