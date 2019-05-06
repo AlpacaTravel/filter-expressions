@@ -182,6 +182,15 @@ describe('json-filter-expressions', () => {
         it('["get", "foo"], { foo: "bar" }', () => {
           expect(evaluate(['get', 'foo'], { foo: 'bar' })).to.equal('bar');
         });
+        it('["get", "a[0].b.c"], { a: [{ b: { c: 3 } }] }', () => {
+          expect(evaluate(['get', 'a[0].b.c'], { a: [{ b: { c: 3 } }] })).to.equal(3);
+        });
+        it('["get", "a[0].b.missing", "default"], { a: [{ b: { c: 3 } }] }', () => {
+          expect(evaluate(['get', 'a[0].b.missing', 'default'], { a: [{ b: { c: 3 } }] })).to.equal('default');
+        });
+        it('["get", "a[0].b.d", ["get", "v"]], { a: [{ b: { c: 3 } }], v: 100 }', () => {
+          expect(evaluate(['get', 'a[0].b.missing', ['get', 'v']], { a: [{ b: { c: 3 } }], v: 100 })).to.equal(100);
+        });
       })
     })
     describe('when supplying combination conditions', () => {
@@ -228,6 +237,9 @@ describe('json-filter-expressions', () => {
       });
       it('["have", "numbers"] === false', () => {
         expect(evaluate(['have', 'numbers'], { letters: ['a'] })).to.equal(false);
+      });
+      it('["in", "deeply[0].nested.numbers[0]", 1] === true', () => {
+        expect(evaluate(['in', 'deeply[0].nested.numbers[0]', 1], { deeply: [{ nested: {numbers: [1, 2]} }] })).to.equal(true);
       });
     });
     describe('when comparing two field values', () => {
@@ -312,6 +324,13 @@ describe('json-filter-expressions', () => {
         it('will user a matching modifier in collection', () => {
           expect(
             evaluate(['all', ['==', 'not(a)', false]], { a: true }, {
+              modifiers: { not: (val) => (!val) },
+            })
+          ).to.equal(true);
+        });
+        it('supports rich property selectors', () => {
+          expect(
+            evaluate(['==', 'not(a.b.c[1])', false], { a: { b: { c: [false, true, false] } } }, {
               modifiers: { not: (val) => (!val) },
             })
           ).to.equal(true);
