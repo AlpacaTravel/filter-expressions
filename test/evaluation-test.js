@@ -41,14 +41,6 @@ describe('filter-expressions', () => {
           expect(evaluate(['exists', undefined])).to.equal(false);
         });
       });
-      describe('using "!in"', () => {
-        it('["!in", 1, 1, 2] === false', () => {
-          expect(evaluate(['!in', 1, 1, 2])).to.equal(false);
-        });
-        it('["!in", 0, 1, 2] === true', () => {
-          expect(evaluate(['!in', 0, 1, 2])).to.equal(true);
-        });
-      });
     });
     describe('when supplying comparative conditions', () => {
       describe('using ==', () => {
