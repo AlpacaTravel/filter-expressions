@@ -1,4 +1,5 @@
-const isEqual = require('lodash.isequal');
+const _isEqual = require('lodash.isequal');
+const _get = require('lodash.get');
 const turfBooleanWithin = require('@turf/boolean-within').default;
 const turfBooleanContains = require('@turf/boolean-contains').default;
 const turfBooleanDisjoint = require('@turf/boolean-disjoint').default;
@@ -33,9 +34,7 @@ const evaluate = (expression, target = null, options = {}) => {
   // Identify the comparative target
   // ... targets can allow you to extract from context..
   let comparative = resolvedExpressions[1];
-  if (target && typeof target[resolvedExpressions[1]] !== 'undefined') {
-    comparative = target[resolvedExpressions[1]];
-  }
+  comparative = _get(target || {}, resolvedExpressions[1], resolvedExpressions[1]);
 
   // Support function modifiers
   // ... you can modify values.. e.g. not(a)
@@ -44,7 +43,7 @@ const evaluate = (expression, target = null, options = {}) => {
     const modifierFunc = modifierParts[1];
     const modifierVal = modifierParts[2];
     if (options.modifiers[modifierFunc]) {
-      let value = target ? target[modifierVal] : modifierVal;
+      let value = target ? _get(target, modifierVal) : modifierVal;
       comparative = options.modifiers[modifierFunc](value, target);
     }
   }
@@ -70,9 +69,9 @@ const evaluate = (expression, target = null, options = {}) => {
 
     // Comparison expressions
     case '==':
-      return (isEqual(comparative, resolvedExpressions[2]));
+      return (_isEqual(comparative, resolvedExpressions[2]));
     case '!=':
-      return (!isEqual(comparative, resolvedExpressions[2]));
+      return (!_isEqual(comparative, resolvedExpressions[2]));
     case '>':
     case '>=':
     case '<':
@@ -106,6 +105,12 @@ const evaluate = (expression, target = null, options = {}) => {
         return comparative.reduce((carry, comp) => carry || expression.slice(2).indexOf(comp) === -1, false);
       }
       return expression.slice(2).indexOf(comparative) === -1;
+    }
+
+    // String
+    case 'match': {
+      const [regex, flags=undefined] = resolvedExpressions.slice(2);
+      return new RegExp(regex, flags).test(comparative);
     }
 
     // Combining
@@ -153,7 +158,7 @@ const evaluate = (expression, target = null, options = {}) => {
 
     // Accessors
     case 'get': {
-      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      const t = target ? _get(target, resolvedExpressions[1], resolvedExpressions[2]) : resolvedExpressions[1];
       return t;
     }
 

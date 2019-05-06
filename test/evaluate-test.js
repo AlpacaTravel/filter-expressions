@@ -148,6 +148,44 @@ describe('json-filter-expressions', () => {
         });
       });
     });
+    describe('when supplying string comparision conditions', () => {
+      describe('using "match" without flags', () => {
+        it('["match", "start"] === true', () => {
+          expect(evaluate(["match", "start middle end", "start"])).to.equal(true);
+        });
+        it('["match", "start middle end", "middle"] === true', () => {
+          expect(evaluate(["match", "start middle end", "middle"])).to.equal(true);
+        });
+        it('["match", "start middle end", "end"] === true', () => {
+          expect(evaluate(["match", "start middle end", "end"])).to.equal(true);
+        });
+        it('["match", "start middle end", "missing"] === false', () => {
+          expect(evaluate(["match", "start middle end", "missing"])).to.equal(false);
+        });
+        it('["match", "start middle end", "start$"] === false', () => {
+          expect(evaluate(["match", "start middle end", "start$"])).to.equal(false);
+        });
+        it('["match", "start middle end", "^end"] === false', () => {
+          expect(evaluate(["match", "start middle end", "^end"])).to.equal(false);
+        });
+        it('["match", "aaa\/bbb", "/a\/b/"] === true', () => {
+          expect(evaluate(["match", "aaa\/bbb", "a\/b"])).to.equal(true);
+        });
+      });
+      describe('using "match" with flags', () => {
+        it('["match", "start middle end", "START","i"] === true', () => {
+          expect(evaluate(["match", "start middle end", "START","i"])).to.equal(true);
+        });
+        it('["match", "first\nsecond", "first$", "m"] === true', () => {
+          expect(evaluate(["match", "first\nsecond", "first$", "m"])).to.equal(true);
+        });
+      });
+      describe('using "match" when supplying a target', () => {
+        it('["match", "value", "regex"], {"regex": "don\'t use", "value": "match against regex"} === true', () => {
+          expect(evaluate(["match", "value", "regex"], {"regex": "don\'t use", "value": "match against regex"})).to.equal(true);
+        });
+      });
+    });
     describe('value accessor', () => {
       describe('using "get"', () => {
         it('["get", 0]', () => {
@@ -155,6 +193,15 @@ describe('json-filter-expressions', () => {
         });
         it('["get", "foo"], { foo: "bar" }', () => {
           expect(evaluate(['get', 'foo'], { foo: 'bar' })).to.equal('bar');
+        });
+        it('["get", "a[0].b.c"], { a: [{ b: { c: 3 } }] }', () => {
+          expect(evaluate(['get', 'a[0].b.c'], { a: [{ b: { c: 3 } }] })).to.equal(3);
+        });
+        it('["get", "a[0].b.missing", "default"], { a: [{ b: { c: 3 } }] }', () => {
+          expect(evaluate(['get', 'a[0].b.missing', 'default'], { a: [{ b: { c: 3 } }] })).to.equal('default');
+        });
+        it('["get", "a[0].b.d", ["get", "v"]], { a: [{ b: { c: 3 } }], v: 100 }', () => {
+          expect(evaluate(['get', 'a[0].b.missing', ['get', 'v']], { a: [{ b: { c: 3 } }], v: 100 })).to.equal(100);
         });
       })
     })
@@ -202,6 +249,9 @@ describe('json-filter-expressions', () => {
       });
       it('["have", "numbers"] === false', () => {
         expect(evaluate(['have', 'numbers'], { letters: ['a'] })).to.equal(false);
+      });
+      it('["in", "deeply[0].nested.numbers[0]", 1] === true', () => {
+        expect(evaluate(['in', 'deeply[0].nested.numbers[0]', 1], { deeply: [{ nested: {numbers: [1, 2]} }] })).to.equal(true);
       });
     });
     describe('when comparing two field values', () => {
@@ -338,6 +388,13 @@ describe('json-filter-expressions', () => {
         it('will user a matching modifier in collection', () => {
           expect(
             evaluate(['all', ['==', 'not(a)', false]], { a: true }, {
+              modifiers: { not: (val) => (!val) },
+            })
+          ).to.equal(true);
+        });
+        it('supports rich property selectors', () => {
+          expect(
+            evaluate(['==', 'not(a.b.c[1])', false], { a: { b: { c: [false, true, false] } } }, {
               modifiers: { not: (val) => (!val) },
             })
           ).to.equal(true);
