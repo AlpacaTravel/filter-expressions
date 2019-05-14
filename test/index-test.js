@@ -49,6 +49,39 @@ describe('json-filter-expressions', () => {
           expect(evaluate(['!in', 0, 1, 2])).to.equal(true);
         });
       });
+      describe('using "empty"', () => {
+        it('["empty", 1] === true', () => {
+          expect(evaluate(['empty', 1])).to.equal(true);
+        });
+        it('["empty", []] === true', () => {
+          expect(evaluate(['empty', []])).to.equal(true);
+        });
+        it('["empty", ["foo"]] === false', () => {
+          expect(evaluate(['empty', ["foo"]])).to.equal(false);
+        });
+        it('["empty", {}] === true', () => {
+          expect(evaluate(['empty', {}])).to.equal(true);
+        });
+        it('["empty", { a: "foo" }] === false', () => {
+          expect(evaluate(['empty', { a: 'foo' }])).to.equal(false);
+        });
+        
+        it('["!empty", 1] === false', () => {
+          expect(evaluate(['!empty', 1])).to.equal(false);
+        });
+        it('["!empty", []] === false', () => {
+          expect(evaluate(['!empty', []])).to.equal(false);
+        });
+        it('["!empty", ["foo"]] === true', () => {
+          expect(evaluate(['!empty', ["foo"]])).to.equal(true);
+        });
+        it('["!empty", {}] === false', () => {
+          expect(evaluate(['!empty', {}])).to.equal(false);
+        });
+        it('["!empty", { a: "foo" }] === true', () => {
+          expect(evaluate(['!empty', { a: 'foo' }])).to.equal(true);
+        });
+      });
     });
     describe('when supplying comparative conditions', () => {
       describe('using ==', () => {

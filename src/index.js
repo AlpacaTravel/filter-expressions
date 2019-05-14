@@ -1,5 +1,6 @@
 const _isEqual = require('lodash.isequal');
 const _get = require('lodash.get');
+const _isEmpty = require('lodash.isempty');
 const turfBooleanWithin = require('@turf/boolean-within').default;
 const turfBooleanContains = require('@turf/boolean-contains').default;
 const turfBooleanDisjoint = require('@turf/boolean-disjoint').default;
@@ -57,6 +58,15 @@ const evaluate = (expression, target = null, options = {}) => {
     case 'exist': {
       const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
       return ((typeof t !== 'undefined' && t !== null));
+    }
+
+    case 'empty': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return _isEmpty(t);
+    }
+    case '!empty': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return !_isEmpty(t);
     }
 
     case '!has':
