@@ -61,12 +61,10 @@ const evaluate = (expression, target = null, options = {}) => {
     }
 
     case 'empty': {
-      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
-      return _isEmpty(t);
+      return _isEmpty(comparative);
     }
     case '!empty': {
-      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
-      return !_isEmpty(t);
+      return !_isEmpty(comparative);
     }
 
     case '!has':
