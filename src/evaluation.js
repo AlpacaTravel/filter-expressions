@@ -6,7 +6,6 @@ const turfBooleanContains = require('@turf/boolean-contains').default;
 const turfBooleanDisjoint = require('@turf/boolean-disjoint').default;
 const turfBooleanCrosses = require('@turf/boolean-crosses').default;
 const turfBooleanOverlap = require('@turf/boolean-overlap').default;
-
 const modifier = /^(.+)\(([^\)]+)\)$/;
 
 // Evaluate an expression
@@ -61,12 +60,10 @@ const evaluate = (expression, target = null, options = {}) => {
     }
 
     case 'empty': {
-      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
-      return _isEmpty(t);
+      return _isEmpty(comparative);
     }
     case '!empty': {
-      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
-      return !_isEmpty(t);
+      return !_isEmpty(comparative);
     }
 
     case '!has':

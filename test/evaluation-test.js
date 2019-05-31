@@ -81,6 +81,22 @@ describe('json-filter-expressions', () => {
         it('["!empty", { a: "foo" }] === true', () => {
           expect(evaluate(['!empty', { a: 'foo' }])).to.equal(true);
         });
+        describe('empty with a modifier', () => {
+          it('will correctly evaluate the modified values', () => {
+            expect(
+              evaluate(['empty', 'foo(a)'], { a: ['foo'] }, {
+                modifiers: { foo: (val) => (val) },
+              })
+            ).to.equal(false);
+          });
+          it('will correctly evaluate the modified values', () => {
+            expect(
+              evaluate(['!empty', 'foo(a)'], { a: ['foo'] }, {
+                modifiers: { foo: (val) => (val) },
+              })
+            ).to.equal(true);
+          });
+        });
       });
     });
     describe('when supplying comparative conditions', () => {
