@@ -1,6 +1,6 @@
 const _isEqual = require('lodash.isequal');
 const _get = require('lodash.get');
-const utils = require('./utils');
+const _isEmpty = require('lodash.isempty');
 const turfBooleanWithin = require('@turf/boolean-within').default;
 const turfBooleanContains = require('@turf/boolean-contains').default;
 const turfBooleanDisjoint = require('@turf/boolean-disjoint').default;
@@ -15,9 +15,16 @@ const evaluate = (expression, target = null, options = {}) => {
   if (typeof expression === 'boolean') {
     return expression;
   }
-
-  // Check the expression
-  if (!utils.isValidExpression(expression)) {
+  // Expressions are arrays
+  if (!Array.isArray(expression)) {
+    return expression;
+  }
+  // Expressions should have more than 2 values
+  if (expression.length < 2) {
+    return expression;
+  }
+  // Expressions start with a string in teh array
+  if (typeof expression[0] !== 'string') {
     return expression;
   }
 
@@ -51,6 +58,15 @@ const evaluate = (expression, target = null, options = {}) => {
     case 'exist': {
       const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
       return ((typeof t !== 'undefined' && t !== null));
+    }
+
+    case 'empty': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return _isEmpty(t);
+    }
+    case '!empty': {
+      const t = target ? target[resolvedExpressions[1]] : resolvedExpressions[1];
+      return !_isEmpty(t);
     }
 
     case '!has':

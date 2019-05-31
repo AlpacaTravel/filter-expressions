@@ -1,7 +1,7 @@
 const { expect } = require('chai');
-const { evaluate } = require('../src/evaluation');
+const { evaluate } = require('../src/index');
 
-describe('filter-expressions', () => {
+describe('json-filter-expressions', () => {
   describe('evaluate()', () => {
     describe('when supplying existential conditions', () => {
       describe('using "!exist"', () => {
@@ -39,6 +39,47 @@ describe('filter-expressions', () => {
         });
         it('["exists", undefined] === true', () => {
           expect(evaluate(['exists', undefined])).to.equal(false);
+        });
+      });
+      describe('using "!in"', () => {
+        it('["!in", 1, 1, 2] === false', () => {
+          expect(evaluate(['!in', 1, 1, 2])).to.equal(false);
+        });
+        it('["!in", 0, 1, 2] === true', () => {
+          expect(evaluate(['!in', 0, 1, 2])).to.equal(true);
+        });
+      });
+      describe('using "empty"', () => {
+        it('["empty", 1] === true', () => {
+          expect(evaluate(['empty', 1])).to.equal(true);
+        });
+        it('["empty", []] === true', () => {
+          expect(evaluate(['empty', []])).to.equal(true);
+        });
+        it('["empty", ["foo"]] === false', () => {
+          expect(evaluate(['empty', ["foo"]])).to.equal(false);
+        });
+        it('["empty", {}] === true', () => {
+          expect(evaluate(['empty', {}])).to.equal(true);
+        });
+        it('["empty", { a: "foo" }] === false', () => {
+          expect(evaluate(['empty', { a: 'foo' }])).to.equal(false);
+        });
+        
+        it('["!empty", 1] === false', () => {
+          expect(evaluate(['!empty', 1])).to.equal(false);
+        });
+        it('["!empty", []] === false', () => {
+          expect(evaluate(['!empty', []])).to.equal(false);
+        });
+        it('["!empty", ["foo"]] === true', () => {
+          expect(evaluate(['!empty', ["foo"]])).to.equal(true);
+        });
+        it('["!empty", {}] === false', () => {
+          expect(evaluate(['!empty', {}])).to.equal(false);
+        });
+        it('["!empty", { a: "foo" }] === true', () => {
+          expect(evaluate(['!empty', { a: 'foo' }])).to.equal(true);
         });
       });
     });

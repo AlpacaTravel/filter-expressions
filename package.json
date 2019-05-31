@@ -1,6 +1,6 @@
 {
   "name": "filter-expressions",
-  "version": "0.2.4",
+  "version": "0.2.6",
   "description": "Basic array structure that can conditionally validate objects",
   "main": "index.js",
   "files": [
@@ -31,6 +31,7 @@
     "@turf/boolean-overlap": "^6.0.0",
     "@turf/boolean-within": "^6.0.0",
     "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {

@@ -45,7 +45,7 @@ $ npm install filter-expressions
 
 ## Supported Comparison Operators
 
-* Existence: exists / exist / !exists / !exist
+* Existence: exists / exist / !exists / !exist / empty / !empty
 * Comparison: == / != / > / >= / < / <=
 * Membership: in / !in
 * String Comparision: match
