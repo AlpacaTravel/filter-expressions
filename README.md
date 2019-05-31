@@ -110,6 +110,24 @@ console.log(evaluate(['at', 1, [2, 4, 6]])); // Prints 4
 console.log(evaluate(['to-number', '4'])); // Prints 4
 ```
 
+## Conversion of query
+
+```javascript
+// Import asMongoDbQueryDocument from the library
+import { asMongoDbQueryDocument } from 'filter-expressions';
+
+// JSON definition of an expression that can run both on a local collection
+const json = [
+  "all",
+  ["==", "type", "document"],
+  ["in", "tags", "example", "other"]
+];
+
+// Convert the evaluation into a mongodb query document that can run on
+// a mongo db collection
+const query = asMongoDbQueryDocument(json);
+```
+
 ## Notes
 
 * Comparisons are done as using lodash "isEqual".
