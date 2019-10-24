@@ -6,7 +6,7 @@ const utils = require("./utils");
  * [-] - Geospatial comparisons
  * [-] - Geospatial comparisons
  */
-const asMongoDbQueryDocument = expression => {
+const asMongoDbQueryDocument = (expression, options = {}) => {
   // If the supplied expression is resolved
   if (typeof expression === "boolean") {
     return expression;
@@ -90,6 +90,21 @@ const asMongoDbQueryDocument = expression => {
     // Types
     case "date": {
       return new Date(resolvedExpressions[1]);
+    }
+
+    default: {
+      // Support pluggable comparisons
+      if (options) {
+        const keyLower = resolvedExpressions[0].toLowerCase();
+
+        // Look for the operators
+        let func = options.converter && options.converter[keyLower];
+        if (typeof func === "function") {
+          const value = func(...resolvedExpressions.slice(1));
+          // Return the actual result
+          return value;
+        }
+      }
     }
   }
 

@@ -197,6 +197,17 @@ describe("filter-expressions", () => {
         });
       });
     });
+    describe("operations", () => {
+      describe("using a custom expression", () => {
+        it("will return the translated value", () => {
+          expect(
+            asMongoDbQueryDocument(["example", "value"], {
+              converter: { example: val => val }
+            })
+          ).to.equal("value");
+        });
+      });
+    });
     describe("value accessor", () => {
       describe('using "get"', () => {
         it('["get", "foo"]');
